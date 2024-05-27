@@ -10,8 +10,7 @@ function App() {
   const [error, setError] = useState(null);
   const timeoutRef = useRef(null); // Ref to store the timeout ID
   const [isLoading, setIsLoading] = useState(true); // New loading state variable
-  const [segment, setSegment] = useState([false, false, false, false, false]); // New state variable to store the segment
-
+  const [segment, setSegment] = useState([false, false, false, false, false, false]); // New state variable to store the segment
 
   useEffect(() => {
     let isMounted = true; // Add this line
@@ -51,8 +50,12 @@ function App() {
       audio.currentTime = 0;  // Reset to start
       audio.play(); // Play the audio
 
+      const increments = [1, 2, 4, 7, 11, 16]; // Increment values
+      const currentIndex = increments.indexOf(currentDuration);
+      const nextDuration = increments[Math.min(currentIndex + 1, increments.length - 1)];
+
       // Update duration for the next play
-      setCurrentDuration(prevDuration => Math.min(prevDuration + 2, 30));
+      setCurrentDuration(nextDuration);
 
       timeoutRef.current = setTimeout(() => {
         if (!audio.paused) {
@@ -62,9 +65,7 @@ function App() {
 
       setSegment(prevSegments => {
         const newSegments = [...prevSegments];
-        for (let i = 0; i < currentDuration; i++) {
-          newSegments[i] = true;
-        }
+        newSegments[currentIndex] = true;
         return newSegments;
       });
     }
@@ -82,14 +83,18 @@ function App() {
             <p>Track: {trackData.track_name}</p>
             <p>Artist: {trackData.artist}</p>
             <p>Album: {trackData.album}</p>
-            <div className="progress-bar">
-              {segment.map((segment, index) => (
-                <div
-                  key={index}
-                  className={`segment ${segment ? 'filled' : ''}`}
-                  style={{ width: `${(100 / segment.length)}%` }} // Ensure equal width
-                ></div>
-              ))}
+            <div className="progress-bar-container">
+              <div className="top-border"></div>
+              <div className="progress-bar">
+                {segment.map((segment, index) => (
+                  <div
+                    key={index}
+                    className={`segment ${segment ? 'filled' : ''}`}
+                    style={{ width: `${[1, 2, 4, 7, 11, 16][index] * 100 / 16}%` }} // Ensure proportional width
+                  ></div>
+                ))}
+              </div>
+              <div className="bottom-border"></div>
             </div>
             <button onClick={handlePlayClick} className="custom-play-button">
               <PlayIcon /> 

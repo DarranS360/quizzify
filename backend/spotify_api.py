@@ -14,34 +14,6 @@ client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
 auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-# def get_random_track():
-#     # Get a random track from the Spotify API
-#     track = None
-#     while track is None:
-#         results = sp.recommendations(seed_genres=['pop', 'rock'], limit=1)['tracks'][0]
-
-#         track_id = results['id']
-#         track_name = results['name']
-#         artist = results['artists'][0]['name']
-#         album = results['album']['name']
-#         preview_url = results['preview_url']
-
-#         if preview_url:
-#             # snippet_path = extract_audio_snippet(preview_url, 'audio_snippet.mp3', 15)
-#             print(artist, track_name, album, preview_url)
-#             return {
-#                 'name': track_name,
-#                 'artist': artist,
-#                 'album': album,
-#                 'preview_url': preview_url
-#             }
-
-#         else:
-#             track = None
-# song_name = "Living in America"
-# artist_name = "James Brown"
-# results = sp.search(q=f"track:{song_name} artist:{artist_name}", type="track", limit=1)
-
 def get_random_track():
     results = sp.search(q='greatest hits OR top tracks OR best of', type='playlist', limit=50)
 
