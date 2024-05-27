@@ -1,22 +1,104 @@
-import logo from './logo.svg';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import './AudioPlayer.css';
+import { ReactComponent as PlayIcon } from './play.svg';
 
 function App() {
+  const [currentDuration, setCurrentDuration] = useState(1);
+  const audioRef = useRef(null);
+  const [trackData, setTrackData] = useState(null);
+  const [error, setError] = useState(null);
+  const timeoutRef = useRef(null); // Ref to store the timeout ID
+  const [isLoading, setIsLoading] = useState(true); // New loading state variable
+  const [segment, setSegment] = useState([false, false, false, false, false]); // New state variable to store the segment
+
+
+  useEffect(() => {
+    let isMounted = true; // Add this line
+
+    const fetchTrack = async () => {
+      if (isMounted) { // Check if the component is still mounted
+        try {
+          const response = await fetch('http://localhost:4999/');
+          if (!response.ok) {
+            throw new Error('Network response was not ok.');
+          }
+          const data = await response.json();
+          setTrackData(data);
+          setError(null);
+        } catch (error) {
+          console.error('Error fetching track:', error);
+          setError('Failed to fetch track data.');
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchTrack();
+
+    return () => { // Cleanup function
+      clearTimeout(timeoutRef.current); // Clear the timeout on unmount
+      isMounted = false; // Set it to false when the component unmounts
+    };
+  }, []);
+
+  const handlePlayClick = () => {
+    const audio = audioRef.current;
+    if (audio) {
+      clearTimeout(timeoutRef.current); // Clear previous timeout
+
+      audio.currentTime = 0;  // Reset to start
+      audio.play(); // Play the audio
+
+      // Update duration for the next play
+      setCurrentDuration(prevDuration => Math.min(prevDuration + 2, 30));
+
+      timeoutRef.current = setTimeout(() => {
+        if (!audio.paused) {
+          audio.pause();
+        }
+      }, currentDuration * 1000);
+
+      setSegment(prevSegments => {
+        const newSegments = [...prevSegments];
+        for (let i = 0; i < currentDuration; i++) {
+          newSegments[i] = true;
+        }
+        return newSegments;
+      });
+    }
+  };
+  
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Quizzify</h1>
+        {error ? (
+          <p>{error}</p>
+        ) : trackData ? (
+          <>
+            <img src={trackData.cover_image} alt="Album cover" />
+            <p>Track: {trackData.track_name}</p>
+            <p>Artist: {trackData.artist}</p>
+            <p>Album: {trackData.album}</p>
+            <div className="progress-bar">
+              {segment.map((segment, index) => (
+                <div
+                  key={index}
+                  className={`segment ${segment ? 'filled' : ''}`}
+                  style={{ width: `${(100 / segment.length)}%` }} // Ensure equal width
+                ></div>
+              ))}
+            </div>
+            <button onClick={handlePlayClick} className="custom-play-button">
+              <PlayIcon /> 
+            </button>
+            <audio ref={audioRef} src={trackData.preview_url} /> {/* Audio element */}
+          </>
+        ) : (
+          <p>Loading track data...</p> 
+        )}
       </header>
     </div>
   );

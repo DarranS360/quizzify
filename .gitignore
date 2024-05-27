@@ -24,3 +24,10 @@ frontend/node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#.env file
+.env
+
+# .cache file/folder
+.cache
+__pycache__/
