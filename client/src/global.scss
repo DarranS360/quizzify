@@ -1,0 +1,33 @@
+// src/global.scss
+@import "bootstrap/scss/bootstrap";
+
+:root {
+  --primary-color: #1DB954;    // Spotify green
+  --secondary-color: #191414;  // Spotify black
+}
+
+body {
+  background-color: #f8f9fa;
+  color: var(--secondary-color);
+}
+
+.btn-spotify {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  
+  &:hover {
+    background-color: darken(#1DB954, 10%);
+    border-color: darken(#1DB954, 10%);
+    color: white;
+  }
+}
+
+.game-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
