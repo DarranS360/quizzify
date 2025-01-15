@@ -1,33 +1,123 @@
 // src/global.scss
-@import "bootstrap/scss/bootstrap";
+// src/global.scss
+@import 'bootstrap/scss/bootstrap';
 
 :root {
-  --primary-color: #1DB954;    // Spotify green
-  --secondary-color: #191414;  // Spotify black
-}
+    --heardle-green: #42b983;
+    --heardle-dark: #121212;
+    --heardle-gray: #2c2c2c;
+    --heardle-light: #ffffff;
+    }
 
 body {
-  background-color: #f8f9fa;
-  color: var(--secondary-color);
-}
-
-.btn-spotify {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  color: white;
-  
-  &:hover {
-    background-color: darken(#1DB954, 10%);
-    border-color: darken(#1DB954, 10%);
-    color: white;
-  }
+    background-color: var(--heardle-dark);
+    color: var(--heardle-light);
 }
 
 .game-container {
-  max-width: 600px;
-  margin: 0 auto;
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: var(--heardle-dark);
+    border: 1px solid var(--heardle-gray);
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.btn-heardle {
+    background-color: var(--heardle-green);
+    border: none;
+    color: var(--heardle-dark);
+    font-weight: 600;
+    
+    &:hover {
+        background-color: darken(#42b983, 10%);
+        color: var(--heardle-dark);
+    }
+}
+
+.progress-bar {
+    background-color: var(--heardle-green);
+}
+
+.form-control {
+    background-color: var(--heardle-gray);
+    border: 1px solid var(--heardle-gray);
+    color: var(--heardle-light);
+    
+    &:focus {
+        background-color: var(--heardle-gray);
+        border-color: var(--heardle-green);
+        color: var(--heardle-light);
+        box-shadow: none;
+    }
+
+    &::placeholder {
+        color: #666;
+    }
+}
+
+.list-group-item {
+    background-color: var(--heardle-gray);
+    color: var(--heardle-light);
+    border: 1px solid #444;
+    
+    &:hover {
+        background-color: #666;
+        color: var(--heardle-light);
+    }
+}
+
+.audio-progress {
+    height: 4px;
+    background-color: var(--heardle-gray);
+    border-radius: 2px;
+    overflow: hidden;
+    
+    .progress-bar {
+        background-color: var(--heardle-green);
+        transition: width 0.1s linear;
+    }
+}
+
+.play-button {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.guess-box {
+    background-color: var(--heardle-dark);
+    border: 1px solid #333;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+  
+    .guess-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+  
+    .skip-mark {
+        color: #666;
+        font-size: 1.5rem;
+    }
+  
+    .wrong-mark {
+        color: #ff0033;
+    }
+  
+    .skipped-text {
+        color: #666;
+    }
+  
+    .guess-text {
+        color: var(--heardle-light);
+    }
 }

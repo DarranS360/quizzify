@@ -31,3 +31,5 @@ yarn-error.log*
 # .cache file/folder
 .cache
 __pycache__/
+# React Component Preview
+previewConfig.json
