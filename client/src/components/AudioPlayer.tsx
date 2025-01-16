@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { AudioPlayerProps } from '../types';
+import { BsPlayCircle, BsPauseCircle } from 'react-icons/bs';
 
 function AudioPlayer({ className, attempts }: AudioPlayerProps) {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -50,18 +51,16 @@ function AudioPlayer({ className, attempts }: AudioPlayerProps) {
     return (
         <div className={`${className} p-3 bg-dark rounded`}>
             <div className="d-flex align-items-center justify-content-between">
-                <div className="progress flex-grow-1 mx-2" style={{ height: '4px' }}>
-                    <div 
-                        className="progress-bar bg-success" 
-                        style={{ width: `${progress}%` }}
-                    />
-                </div>
                 <Button 
                     variant="heardle"
                     onClick={handlePlay}
-                    className="px-4"
+                    className="play-button-circle flex-grow-1 d-flex justify-content-center"
                 >
-                    {isPlaying ? '❚❚' : '▶'}
+                    {isPlaying ? (
+                        <BsPauseCircle size={44} />
+                    ) : (
+                        <BsPlayCircle size={44} />
+                )}
                 </Button>
             </div>
             <audio 

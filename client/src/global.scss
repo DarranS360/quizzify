@@ -91,33 +91,44 @@ body {
 .guess-box {
     background-color: var(--heardle-dark);
     border: 1px solid #333;
-    padding: 1rem;
+    padding-left: 1rem;
     margin-bottom: 0.5rem;
     border-radius: 4px;
     min-height: 50px;
     display: flex;
     align-items: center;
-  
+
     .guess-content {
         display: flex;
         align-items: center;
         gap: 8px;
     }
-  
+
     .skip-mark {
         color: #666;
         font-size: 1.5rem;
     }
-  
+
     .wrong-mark {
         color: #ff0033;
     }
-  
+
     .skipped-text {
         color: #666;
     }
-  
+
     .guess-text {
         color: var(--heardle-light);
+    }
+}
+
+.play-button-circle {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    color: var(--heardle-green);
+
+    &:hover {
+        opacity: 0.8;
     }
 }
