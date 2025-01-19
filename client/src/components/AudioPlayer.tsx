@@ -3,9 +3,8 @@ import { Button } from 'react-bootstrap';
 import { AudioPlayerProps } from '../types';
 import { BsPlayCircle, BsPauseCircle } from 'react-icons/bs';
 
-function AudioPlayer({ className, attempts }: AudioPlayerProps) {
+function AudioPlayer({ attempts, previewUrl, onProgressChange }: AudioPlayerProps) {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [progress, setProgress] = useState(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const progressInterval = useRef<number | null>(null);
 
@@ -19,24 +18,26 @@ function AudioPlayer({ className, attempts }: AudioPlayerProps) {
                 if (progressInterval.current) {
                     window.clearInterval(progressInterval.current);
                 }
+                onProgressChange(0);  // Reset progress when paused
             } else {
                 audioRef.current.currentTime = 0;
                 audioRef.current.play();
             
                 progressInterval.current = window.setInterval(() => {
-                if (audioRef.current) {
-                    const currentProgress = (audioRef.current.currentTime / currentDuration) * 100;
-                    setProgress(Math.min(currentProgress, 100));
-                    
-                    if (audioRef.current.currentTime >= currentDuration) {
-                        audioRef.current.pause();
-                        setIsPlaying(false);
-                        window.clearInterval(progressInterval.current!);
+                    if (audioRef.current) {
+                        const currentProgress = (audioRef.current.currentTime / currentDuration) * 100;
+                        onProgressChange(Math.min(currentProgress, 100));
+                        
+                        if (audioRef.current.currentTime >= currentDuration) {
+                            audioRef.current.pause();
+                            setIsPlaying(false);
+                            window.clearInterval(progressInterval.current!);
+                            onProgressChange(0);
+                        }
                     }
-                }
-            }, 50);
-        }
-        setIsPlaying(!isPlaying);
+                }, 50);
+            }
+            setIsPlaying(!isPlaying);
         }
     };
 
@@ -49,27 +50,27 @@ function AudioPlayer({ className, attempts }: AudioPlayerProps) {
     }, []);
 
     return (
-        <div className={`${className} p-3 bg-dark rounded`}>
-            <div className="d-flex align-items-center justify-content-between">
+        <div className="audio-player-container">
+            <div className="player-button-wrapper">
                 <Button 
                     variant="heardle"
                     onClick={handlePlay}
-                    className="play-button-circle flex-grow-1 d-flex justify-content-center"
+                    className="player-button"
+                    disabled={!previewUrl}
                 >
                     {isPlaying ? (
-                        <BsPauseCircle size={44} />
+                        <BsPauseCircle size={64} />
                     ) : (
-                        <BsPlayCircle size={44} />
-                )}
+                        <BsPlayCircle size={64} />
+                    )}
                 </Button>
             </div>
             <audio 
                 ref={audioRef}
-                // Replace with actual song URL from your backend
-                src="https://example.com/sample.mp3"
+                src={previewUrl}
                 onEnded={() => {
                     setIsPlaying(false);
-                    setProgress(0);
+                    onProgressChange(0);
                 }}
             />
         </div>

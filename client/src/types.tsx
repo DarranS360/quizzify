@@ -3,16 +3,10 @@ export interface GuessInputProps {
     className?: string;
 }
 
-export interface Song {
-    id: string;
+export interface Track {
     title: string;
     artist: string;
-    previewUrl: string;
-}
-
-export interface AudioPlayerProps {
-    className?: string;
-    attempts: number;  
+    preview: string;
 }
 
 export interface GuessResult {
@@ -24,4 +18,11 @@ export interface GuessResult {
 export interface GuessHistory {
     type: 'SKIPPED' | 'WRONG' | 'CORRECT';
     guess?: string;
+}
+
+export interface AudioPlayerProps {
+    className?: string;
+    attempts: number;
+    previewUrl: string;
+    onProgressChange: (progress: number) => void; 
 }

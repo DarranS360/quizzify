@@ -1,62 +1,68 @@
 import { GuessInputProps } from '../types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, ListGroup } from 'react-bootstrap';
+import { Track } from '../types';
 
 function GuessInput({ onGuess, className }: GuessInputProps) {
     const [input, setInput] = useState('');
+    const [suggestions, setSuggestions] = useState<Track[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const mockSuggestions = [
-        "Bohemian Rhapsody - Queen",
-        "Hotel California - Eagles",
-        "Stairway to Heaven - Led Zeppelin",
-        "Imagine - John Lennon",
-        "Like a Rolling Stone - Bob Dylan",
-        "Hey Jude - The Beatles"
-    ]
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+            if (input.length < 2) {
+                setSuggestions([]);
+                return;
+            }
 
-    const [suggestions, setSuggestions] = useState<string[]>([]);
-    const handleInputChange = (value: string) => {
-        setInput(value);
-        // Filter suggestions based on input
-        if (value.length > 0) {
-            const filtered = mockSuggestions.filter(song => 
-                song.toLowerCase().includes(value.toLowerCase())
-            );
-            setSuggestions(filtered);
-        } else {
-            setSuggestions([]);
-        }
-    };
+            setIsLoading(true);
+            try {
+                const response = await fetch(`http://localhost:4999/api/tracks/search?query=${encodeURIComponent(input)}`);
+                const data = await response.json();
+                setSuggestions(data);
+            } catch (error) {
+                console.error('Error fetching suggestions:', error);
+                setSuggestions([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    const handleSelect = (selection: string) => {
-        setInput(selection);
+        const debounceTimer = setTimeout(fetchSuggestions, 300);
+        return () => clearTimeout(debounceTimer);
+    }, [input]);
+
+    const handleSelect = (track: Track) => {
+        const guessString = `${track.title} - ${track.artist}`;
+        setInput('');
         setSuggestions([]);
-        onGuess(selection);
-    }
+        onGuess(guessString);
+    };
 
     return (
         <div className={className}>
             <Form.Control
                 type="text"
-                placeholder="Know the song? Search for it!"
+                placeholder="Search for a song..."
                 value={input}
-                onChange={(e) => handleInputChange(e.target.value)}
+                onChange={(e) => setInput(e.target.value)}
                 autoComplete="off"
             />
             {suggestions.length > 0 && (
                 <ListGroup className="mt-1">
-                    {suggestions.map((suggestion, index) => (
+                    {suggestions.map((track, index) => (
                         <ListGroup.Item 
                             key={index}
                             action
-                            onClick={() => handleSelect(suggestion)}
-                            className="cursor-pointer"
+                            onClick={() => handleSelect(track)}
+                            className="cursor-pointer hover:bg-gray-100"
                         >
-                            {suggestion}
+                            {track.title} - {track.artist}
                         </ListGroup.Item>
                     ))}
                 </ListGroup>
             )}
+            {isLoading}
         </div>
     );
 }
