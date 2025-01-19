@@ -4,7 +4,7 @@
 venv/
 
 # dependencies
-frontend/node_modules
+client/node_modules
 /.pnp
 .pnp.js
 
@@ -31,3 +31,5 @@ yarn-error.log*
 # .cache file/folder
 .cache
 __pycache__/
+# React Component Preview
+previewConfig.json

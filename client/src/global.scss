@@ -1,0 +1,196 @@
+@import 'bootstrap/scss/bootstrap';
+
+:root {
+    --heardle-green: #42b983;
+    --heardle-dark: #121212;
+    --heardle-gray: #2c2c2c;
+    --heardle-light: #ffffff;
+    }
+
+body {
+    background-color: var(--heardle-dark);
+    color: var(--heardle-light);
+}
+
+.game-container {
+    background-color: var(--heardle-dark);
+    border: 1px solid var(--heardle-gray);
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 0 auto;
+
+    .action-buttons {
+        button {
+            min-width: 100px; 
+            max-width: 200px;  
+            flex: 1;          
+        }
+    }
+}
+
+.btn-heardle {
+    background-color: var(--heardle-green);
+    border: none;
+    color: var(--heardle-dark);
+    font-weight: 600;
+    
+    &:hover {
+        background-color: darken(#42b983, 10%);
+        color: var(--heardle-dark);
+    }
+}
+
+.form-control {
+    background-color: var(--heardle-gray);
+    border: 1px solid var(--heardle-gray);
+    color: var(--heardle-light);
+    
+    &:focus {
+        background-color: var(--heardle-gray);
+        border-color: var(--heardle-green);
+        color: var(--heardle-light);
+        box-shadow: none;
+    }
+
+    &::placeholder {
+        color: #666;
+    }
+}
+
+.list-group-item {
+    background-color: var(--heardle-gray);
+    color: var(--heardle-light);
+    border: 1px solid #444;
+    
+    &:hover {
+        background-color: #666;
+        color: var(--heardle-light);
+    }
+}
+
+.play-button {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.guess-box {
+    background-color: var(--heardle-dark);
+    border: 1px solid #333;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+
+    .guess-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .skip-mark {
+        color: #666;
+        font-size: 1.5rem;
+    }
+
+    .wrong-mark {
+        color: #ff0033;
+    }
+
+    .skipped-text {
+        color: #666;
+    }
+
+    .guess-text {
+        color: var(--heardle-light);
+    }
+}
+
+.play-button-circle {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    color: var(--heardle-green);
+
+    &:hover {
+        color: darken(#42b983, 10%);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+    }
+}
+
+.audio-player-container {
+    .player-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem; 
+        min-height: 80px; 
+        margin: 0;
+    }
+
+    .player-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        margin: 0;
+        
+        svg {
+            color: var(--heardle-green);
+        }
+
+        &:hover {
+            svg {
+                color: darken(#42b983, 10%);
+            }
+        }
+
+        &:disabled {
+            opacity: 0.5;
+        }
+    }
+}
+
+.progress-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    .progress-segment {
+        height: 8px;
+        background-color: var(--heardle-gray);
+        border-radius: 2px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: relative;
+
+        &.unlocked {
+            background-color: #333;  // Darker grey for unlocked segments
+        }
+
+        &:nth-child(1) { width: 6.25%; }   // 1s
+        &:nth-child(2) { width: 12.5%; }    // 2s
+        &:nth-child(3) { width: 25%; }      // 4s
+        &:nth-child(4) { width: 43.75%; }   // 7s
+        &:nth-child(5) { width: 68.75%; }   // 11s
+        &:nth-child(6) { width: 100%; }     // 16s
+
+        .progress-bar {
+            position: absolute;
+            height: 100%;
+            background-color: var(--heardle-green);
+            transition: width 0.1s linear;
+        }
+    }
+}
