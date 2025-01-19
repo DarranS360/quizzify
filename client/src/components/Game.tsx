@@ -5,6 +5,7 @@ import GuessInput from './GuessInput';
 import { GuessResult, GuessHistory } from '../types';
 
 function Game() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [currentSong, setCurrentSong] = useState(null);
     const [attempts, setAttempts] = useState(0);
     const [currentGuess, setCurrentGuess] = useState<string>('');
@@ -91,8 +92,11 @@ function Game() {
                 </div>
             </div>
         
-            <AudioPlayer className="mb-4" attempts={attempts} />
-            
+            {/* Pass accessToken to AudioPlayer */}
+            <AudioPlayer 
+                className="mb-4" 
+                attempts={attempts} 
+            />            
             {guessResult && (
                 <Alert 
                     variant={guessResult.isCorrect ? "success" : "warning"}
